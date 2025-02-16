@@ -4,13 +4,11 @@ from main_funtions import read_from_file
 import json
 import openai
 
-# Load API Key from json file
+# Access API Key
 try:
-    api_keys = read_from_file("api_key.json")
-    openai_key = api_keys["openai_key"]
-    openai.api_key = openai_key
-except Exception as e:
-    st.error(f"Failed to load API key: {str(e)}")
+    openai.api_key = st.secrets["openai_key"]
+except KeyError:
+    st.error("Failed to load OpenAI API key from Streamlit secrets.")
     st.stop()
 
 # Load resume data once
