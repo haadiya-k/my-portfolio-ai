@@ -17,20 +17,25 @@ except Exception as e:
     st.error(f"An unexpected error occurred when loading the API key: {str(e)}")
     st.stop()
 
-data_file_path = os.getenv("DATA_JSON_PATH", "data.json")
-
-# Load resume data once
+# Initialize session state for resume data
 if "resume_data" not in st.session_state:
+    st.session_state["resume_data"] = None
+
+data_file_path = "data.json"
+
+# Load resume data once, if not already loaded
+if st.session_state["resume_data"] is None:
     try:
         with open(data_file_path, "r") as file:
             st.session_state["resume_data"] = json.load(file)
+    except FileNotFoundError:
+        st.error(f"Failed to load resume data from '{data_file_path}': File not found.")
+        st.session_state["resume_data"] = {}  # Set an empty dictionary as fallback
     except Exception as e:
-        st.error(f"Failed to load resume data from '{data_file_path}': {str(e)}")
-        st.stop()
+        st.error(f"Failed to load resume data: {str(e)}")
+        st.session_state["resume_data"] = {}  # Set an empty dictionary as fallback
 
-# Retrieve the loaded resume data from the session state.
 resume_data = st.session_state["resume_data"]
-st.write("Resume data loaded successfully!")
 
 if 'current_page' not in st.session_state:
     st.session_state['current_page'] = 'portfolio AI'
