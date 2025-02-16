@@ -1,30 +1,36 @@
+import os
 import streamlit as st
 from streamlit import session_state
-from main_funtions import read_from_file
 import json
 import openai
+
+# Set the page configuration
+st.set_page_config(page_title="my portfolio AI", layout="wide")
 
 # Access API Key
 try:
     openai.api_key = st.secrets["openai_key"]
 except KeyError:
-    st.error("Failed to load OpenAI API key from Streamlit secrets.")
+    st.error("Failed to load OpenAI API key from Streamlit secrets. Please ensure the key is correctly set in the secrets management.")
     st.stop()
+except Exception as e:
+    st.error(f"An unexpected error occurred when loading the API key: {str(e)}")
+    st.stop()
+
+data_file_path = os.getenv("DATA_JSON_PATH", "data.json")
 
 # Load resume data once
 if "resume_data" not in st.session_state:
     try:
-        with open("data.json", "r") as file:
+        with open(data_file_path, "r") as file:
             st.session_state["resume_data"] = json.load(file)
     except Exception as e:
-        st.error(f"Failed to load resume data: {str(e)}")
+        st.error(f"Failed to load resume data from '{data_file_path}': {str(e)}")
         st.stop()
 
 # Retrieve the loaded resume data from the session state.
 resume_data = st.session_state["resume_data"]
-
-# Set the page configuration
-st.set_page_config(page_title="my portfolio AI", layout="wide")
+st.write("Resume data loaded successfully!")
 
 if 'current_page' not in st.session_state:
     st.session_state['current_page'] = 'portfolio AI'
