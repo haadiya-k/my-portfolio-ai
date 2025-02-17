@@ -79,7 +79,7 @@ if st.session_state['current_page'] == 'portfolio AI':
 
         try:
             response_stream = openai.chat.completions.create(
-                model="gpt-4",
+                model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": user_input}
