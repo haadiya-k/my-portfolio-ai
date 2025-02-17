@@ -120,15 +120,17 @@ if st.session_state['current_page'] == 'portfolio AI':
 
             response_stream = generate_response(st.session_state["chat_history"], user_input)
 
-            full_response = ""  # Store full response to save in chat history
-            for chunk in response_stream:
-                if chunk.choices:
-                    text_chunk = chunk.choices[0].delta.content or ""
-                    full_response += text_chunk
-                    typing_placeholder.write(full_response)  # Update UI in real-time
+            if response_stream and hasattr(response_stream, "__iter__"):  # Ensure response is iterable
+                full_response = ""
+                for chunk in response_stream:
+                    if chunk.choices:
+                        text_chunk = chunk.choices[0].delta.content or ""
+                        full_response += text_chunk
+                        typing_placeholder.write(full_response)  # Update UI in real-time
 
-            # Append chatbot response to chat history
-            st.session_state["chat_history"].append(("Chatbot", full_response))
+                st.session_state["chat_history"].append(("Chatbot", full_response))
+            else:
+                st.error("Failed to generate response. Please try again later.")
 
 elif session_state["current_page"] == 'about me' :
     st.title("about me")
