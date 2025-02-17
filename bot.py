@@ -61,7 +61,7 @@ if st.session_state['current_page'] == 'portfolio AI':
             "Respond in the first person (e.g., 'I have experience in...')."
             "Keep responses engaging, friendly, and a little bit fun! "
             "Use emojis when relevant. If someone asks something unrelated to Haadiya's portfolio, politely decline."
-            "Do not use AI phrases like 'Hello there! How can I assist you today?'."
+            "Do not use AI phrases like 'Hello there! How can I assist you today?' or 'Hey there! How can I help you today? 😊'."
         )
 
         structured_data = "\n".join(
