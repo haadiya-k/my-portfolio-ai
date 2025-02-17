@@ -92,7 +92,7 @@ if st.session_state['current_page'] == 'portfolio AI':
             return None
 
     # Streamlit UI
-    st.title("my portfolio AI")
+    st.title("Haadiya's portfolio AI")
     st.write("**ask me about my skills, projects, education, and experience!**")
 
     # Store chat history
@@ -132,6 +132,7 @@ if st.session_state['current_page'] == 'portfolio AI':
             else:
                 st.error("Failed to generate response. Please try again later.")
 
+# About me page
 elif session_state["current_page"] == 'about me' :
     st.title("about me")
 
@@ -154,6 +155,7 @@ elif session_state["current_page"] == 'about me' :
     """
     )
 
+# Contact page
 elif st.session_state["current_page"] == 'contact':
     st.title("let's connect!")
 
