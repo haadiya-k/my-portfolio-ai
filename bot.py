@@ -1,7 +1,6 @@
-import os
+import requests
 import streamlit as st
 from streamlit import session_state
-import json
 import openai
 
 # Set the page configuration
@@ -10,32 +9,37 @@ st.set_page_config(page_title="my portfolio AI", layout="wide")
 # Access API Key
 try:
     openai.api_key = st.secrets["openai_key"]
-except KeyError:
-    st.error("Failed to load OpenAI API key from Streamlit secrets. Please ensure the key is correctly set in the secrets management.")
-    st.stop()
-except Exception as e:
-    st.error(f"An unexpected error occurred when loading the API key: {str(e)}")
+    resume_api_key = st.secrets["resume_key"]
+except KeyError as e:
+    st.error(f"Failed to load keys from Streamlit secrets: {e}")
     st.stop()
 
-# Initialize session state for resume data
-if "resume_data" not in st.session_state:
-    st.session_state["resume_data"] = None
+# Define API URL
+api_url = st.secrets["resume_api_url"]
 
-data_file_path = "data.json"
+# Header with API key
+headers = {
+    'x-api-key': resume_api_key
+}
 
-# Load resume data once, if not already loaded
-if st.session_state["resume_data"] is None:
+# Function to fetch resume data from the API
+@st.cache_data
+def get_resume_data(api_url, headers):
+    response = requests.get(api_url, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Fetch resume data and store it in session state
+if 'resume_data' not in st.session_state:
     try:
-        with open(data_file_path, "r") as file:
-            st.session_state["resume_data"] = json.load(file)
-    except FileNotFoundError:
-        st.error(f"Failed to load resume data from '{data_file_path}': File not found.")
-        st.session_state["resume_data"] = {}  # Set an empty dictionary as fallback
-    except Exception as e:
-        st.error(f"Failed to load resume data: {str(e)}")
-        st.session_state["resume_data"] = {}  # Set an empty dictionary as fallback
+        st.session_state['resume_data'] = get_resume_data(api_url, headers)
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error fetching resume data: {e}")
+        st.session_state['resume_data'] = {}  # empty dictionary
 
-resume_data = st.session_state["resume_data"]
+# Initialise resume_data
+resume_data = st.session_state['resume_data']
+
 
 if 'current_page' not in st.session_state:
     st.session_state['current_page'] = 'portfolio AI'
