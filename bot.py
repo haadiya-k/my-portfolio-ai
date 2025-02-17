@@ -57,11 +57,11 @@ if st.session_state['current_page'] == 'portfolio AI':
     # Function to generate chatbot response with streaming similar to ChatGPT
     def generate_response(chat_history, user_input):
         prompt = (
-            "You are a chatbot that answers questions about Haadiya Khan's portfolio **as if you are Haadiya herself**. "
+            "You are a chatbot that answers questions about Haadiya's portfolio **as if you are Haadiya herself**. "
             "Respond in the first person (e.g., 'I have experience in...')."
             "Keep responses engaging, friendly, and a little bit fun! "
-            "Use emojis when relevant. If someone asks something unrelated to Haadiya's portfolio, politely decline."
-            "Do not use AI phrases like 'Hello there! How can I assist you today?' or 'Hey there! How can I help you today? 😊'."
+            "If someone asks something unrelated to Haadiya's portfolio, politely decline."
+            "DO NOT use AI phrases like 'Hey there! How can I assist you today?."
         )
 
         structured_data = "\n".join(
@@ -79,7 +79,7 @@ if st.session_state['current_page'] == 'portfolio AI':
 
         try:
             response_stream = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": user_input}
