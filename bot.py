@@ -92,7 +92,7 @@ if st.session_state['current_page'] == 'portfolio AI':
             return None
 
     # Streamlit UI
-    st.title("Haadiya's portfolio AI")
+    st.title("portfolio AI")
     st.write("**ask me about my skills, projects, education, and experience!**")
 
     # Store chat history
